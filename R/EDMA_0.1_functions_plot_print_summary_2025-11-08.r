@@ -86,7 +86,7 @@ plot.FM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alp
   lmks <- cmdscale(x,3)
   colnames(lmks) <- c("X", "Y", "Z")
   rownames(lmks) <- attr(x, "Labels")
-  warning("Form matrix converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
+  warning("\nForm matrix converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
   plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex)
 }
 
@@ -110,6 +110,6 @@ plot.SM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alp
   lmks <- cmdscale(x,3)
   colnames(lmks) <- c("X", "Y", "Z")
   rownames(lmks) <- attr(x, "Labels")
-  warning("Shape matrix rescaled and converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
+  warning("\nShape matrix rescaled and converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
   plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex)
 }

@@ -21,5 +21,5 @@ Generate the Euclidean distance form matrix (FM) for a single object.
 \examples{
 FM1 <- calcFM(guenons$rawcoords[,,1])
 str(FM1)
-FM1
+plot(FM1)
 }

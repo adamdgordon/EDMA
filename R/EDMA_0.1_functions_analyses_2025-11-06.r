@@ -9,7 +9,7 @@
 #' @examples
 #' FM1 <- calcFM(guenons$rawcoords[,,1])
 #' str(FM1)
-#' FM1
+#' plot(FM1)
 #' @export
 calcFM <- function(x) {
   d <- dist(x)
@@ -29,7 +29,7 @@ calcFM <- function(x) {
 #' @examples
 #' SM1 <- calcSM(guenons$rawcoords[,,1])
 #' str(SM1)
-#' SM1
+#' plot(SM1)
 #' @export
 calcSM <- function(x) {
   d <- calcFM(x)
@@ -66,7 +66,7 @@ shapediff <- function(x, y) {
 #' @return A list return by \code{cmdscale} containing the principal coordinates and associated 
 #'   eigenvalues.
 #' @examples
-#' PCoA <- EDMApcoa(guenons$rawcoords)
+#' PCoA <- EDMApcoa(guenons$rawcoords[,,guenons$species=="patas"])
 #' plot(PCoA$points)
 #' @export
 EDMApcoa <- function(x) {
@@ -112,8 +112,6 @@ EDMApcoa <- function(x) {
 #' @examples
 #' results <- lmkdisper(guenons$rawcoords[1:20,,guenons$species=="patas"], plt=TRUE, highlight=1)
 #' results
-#' results2 <- lmkdisper(guenons$rawcoords[,,guenons$species=="patas"], plt=FALSE)
-#' results2
 #' @export
 lmkdisper <- function(x, plt=FALSE, highlight=NULL, pt.bg="#00000020", hl.pch=4, hl.col="#FF000040") {
   # x is an array of landmarks
