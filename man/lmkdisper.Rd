@@ -40,6 +40,4 @@ Calculates a measure of spatial variability for each landmark in relation to all
 \examples{
 results <- lmkdisper(guenons$rawcoords[1:20,,guenons$species=="patas"], plt=TRUE, highlight=1)
 results
-results2 <- lmkdisper(guenons$rawcoords[,,guenons$species=="patas"], plt=FALSE)
-results2
 }

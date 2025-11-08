@@ -20,6 +20,6 @@ Perform a Principal Coordinates Analysis (PCoA) quantifying shape variation for 
   for all objects (calculated using \code{shapediff}).
 }
 \examples{
-PCoA <- EDMApcoa(guenons$rawcoords)
+PCoA <- EDMApcoa(guenons$rawcoords[,,guenons$species=="patas"])
 plot(PCoA$points)
 }

@@ -1,5 +1,6 @@
 # EDMA
-EDA is a package with a set of functions for Euclidean Distance Matrix Analysis of shapes. This is a work in progress for an in-house lab group.
+EDA is a package with a set of functions for Euclidean Distance Matrix Analysis of shapes. 
+<strong>This is a work in progress for an in-house lab group.</strong>
 
 ### To install the current version of dimorph R-package from GitHub using devtools:
 

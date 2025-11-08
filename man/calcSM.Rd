@@ -21,5 +21,5 @@ Generate the Euclidean distance shape matrix (SM) for a single object.
 \examples{
 SM1 <- calcSM(guenons$rawcoords[,,1])
 str(SM1)
-SM1
+plot(SM1)
 }
