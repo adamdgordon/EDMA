@@ -66,8 +66,8 @@ shapediff <- function(x, y) {
 #' @return A list return by \code{cmdscale} containing the principal coordinates and associated 
 #'   eigenvalues.
 #' @examples
-#' PCoA <- EDMApcoa(guenons$rawcoords[,,guenons$species=="patas"])
-#' plot(PCoA$points)
+#' PCoA <- EDMApcoa(guenons$rawcoords[,,guenons$genus %in% c("Erythrocebus", "Miopithecus")])
+#' plot(PCoA$points, pch=21, bg=guenons$genus[guenons$genus %in% c("Erythrocebus", "Miopithecus")])
 #' @export
 EDMApcoa <- function(x) {
   # x is an array of landmarks
@@ -85,22 +85,21 @@ EDMApcoa <- function(x) {
   }
   slrs <- as.dist(slrs)
   PCoA <- cmdscale(slrs, k=n-1, eig=T)
-  k <- sum(PCoA$eig >=0)
+  k <- sum(PCoA$eig >= 0)
+  if (k > n-1) k <- n-1
   PCoA$points <- PCoA$points[,1:k]
   PCoA$eig <- PCoA$eig[1:k]
   return(PCoA)
 }
 
-#' Quantifying Landmark Dispersion
+#' Visualize Influential Landmarks
 #' 
 #' Calculates a measure of spatial variability for each landmark in relation to all other landmarks 
-#'   for a set of objects.  Builds on the visualization method of Cole and Richtsmeier (1998), but 
-#'   extends it for more than two specimens and adds an explicit quantification component.
-#'   for all objects (calculated using \code{shapediff}).
+#'   for a pair of objects.  This is (mostly) the visualization method of Cole and Richtsmeier (1998), but 
+#'   it presents the log of ratios as opposed to raw ratios, and shows the ratio from shape matrices as 
+#'   well as form matrices.
 #' @param x An array of landmarks for multiple specimens, with the first dimension corresponding to 
 #'   landmarks, the second corresponding to X, Y, and Z, and the third corresponding to specimens.
-#' @param plt A logical value specifying whether or not to plot logged ratios of size-scaled inter-landmark 
-#'   distances.  Defaults to \code{FALSE}. 
 #' @param highlight An integer value specifying the number of a landmark to highlight in plots. If 
 #'   provided, all logged ratios for interlandmark distances involving that landmark will be highlighted 
 #'   in the plot.  Defaults to \code{NULL}.
@@ -108,36 +107,55 @@ EDMApcoa <- function(x) {
 #' @param hl.pch An integer specifying the plotting character to use for highlighted points when a 
 #'   value is supplied to \code{highlight}. 
 #' @param hl.pch A color value to use for highlighted points when a value is supplied to \code{highlight}. 
-#' @return A data frame providing the standard deviation of logged ratios associated with each landmark. 
 #' @examples
-#' results <- lmkdisper(guenons$rawcoords[1:20,,guenons$species=="patas"], plt=TRUE, highlight=1)
-#' results
+#' influentiallmk(A=guenons$rawcoords[,,guenons$genus=="Erythrocebus"][,,1],
+#'                B=guenons$rawcoords[,,guenons$genus=="Miopithecus"][,,1],
+#'                highlight=57)
 #' @export
-lmkdisper <- function(x, plt=FALSE, highlight=NULL, pt.bg="#00000020", hl.pch=4, hl.col="#FF000040") {
-  # x is an array of landmarks
-  lmknames <- attr(calcSM(x[,,1]), "Labels")
+influentiallmk <- function(A, B, highlight=NULL, pt.bg="#00000020", hl.pch=4, hl.col="#FF0000FF") {
+  # A and B are landmark matrices
+  plt=TRUE
+  FMA <- calcFM(A)
+  FMB <- calcFM(B)
+  SMA <- calcSM(A)
+  SMB <- calcSM(B)
+  lmknames <- attr(FMA, "Labels")
   nlmk <- length(lmknames)
-  nspec <- dim(x)[3]
+  nspec <- 2
   colpt <- NULL
   rowpt <- NULL
   for (i in 1:nlmk) colpt <- c(colpt, rep(i, nlmk-i))
   for (i in 2:nlmk) rowpt <- c(rowpt, i:nlmk)
   segs <- data.frame(lmk1=colpt, lmk2=rowpt)
-  SMs <- apply(x, MARGIN=3, FUN=calcSM) # this collapses each individual distance matrix into a column for each specimen
+  FMs <- cbind(as.numeric(FMA), as.numeric(FMB)) # this collapses each individual distance matrix into a column for each specimen
+  SMs <- cbind(as.numeric(SMA), as.numeric(SMB)) # this collapses each individual distance matrix into a column for each specimen
+  rownames(FMs) <- paste0(segs$lmk1, "_", segs$lmk2)
   rownames(SMs) <- paste0(segs$lmk1, "_", segs$lmk2)
+  logFMs <- log(FMs)
   logSMs <- log(SMs)
-  rm(SMs)
+  rm(FMs, SMs)
   # calculate logged shape ratios (as difference in logged shape)
   ads <- combn(nspec, 2) # this is half of the ways to pair them - will need to duplicate final results and multiply duplicate by -1 for other half
+  logFMrats <- apply(ads, 2, FUN=function(x) return(logFMs[,x[1]]-logFMs[,x[2]]))
   logSMrats <- apply(ads, 2, FUN=function(x) return(logSMs[,x[1]]-logSMs[,x[2]]))
-  rm(logSMs)
-  logSMrats <- cbind(logSMrats, -1*logSMrats) # add logged ratios for same pairs with numerator and denominator swapped
+  rm(logFMs, logSMs)
+  #logSMrats <- cbind(logSMrats, -1*logSMrats) # add logged ratios for same pairs with numerator and denominator swapped
   ncomp <- ncol(logSMrats)
+  logFMratvec <- rep(as.numeric(logFMrats), times=2)
   logSMratvec <- rep(as.numeric(logSMrats), times=2)
   segslong <- c(rep(segs$lmk1, times=ncomp), rep(segs$lmk2, times=ncomp))
   segslongDF <- data.frame(lmk1=rep(rep(segs$lmk1, times=ncomp), times=2), lmk2=rep(rep(segs$lmk2, times=ncomp)))
   if (plt) {
 	if (!is.null(highlight)) {
+	par(mfrow=c(2,1))
+    plot(x=segslong[segslongDF$lmk1!=highlight & segslongDF$lmk2!=highlight],
+	     y=logFMratvec[segslongDF$lmk1!=highlight & segslongDF$lmk2!=highlight],
+		 pch=21, col=NULL, bg=pt.bg,
+         xlim=range(segslong), ylim=range(logSMratvec), xlab="landmark", ylab="log form ratio")
+    abline(h=0, col="#00000060")
+	points(x=segslong[segslongDF$lmk1==highlight | segslongDF$lmk2==highlight],
+	       y=logFMratvec[segslongDF$lmk1==highlight | segslongDF$lmk2==highlight],
+		   pch=hl.pch, col=hl.col)
     plot(x=segslong[segslongDF$lmk1!=highlight & segslongDF$lmk2!=highlight],
 	     y=logSMratvec[segslongDF$lmk1!=highlight & segslongDF$lmk2!=highlight],
 		 pch=21, col=NULL, bg=pt.bg,
@@ -148,15 +166,19 @@ lmkdisper <- function(x, plt=FALSE, highlight=NULL, pt.bg="#00000020", hl.pch=4,
 		   pch=hl.pch, col=hl.col)
 	}
 	else{
+	par(mfrow=c(2,1))
+    plot(x=segslong, y=logFMratvec, pch=21, col=NULL, bg=pt.bg,
+         xlab="landmark", ylab="log form ratio")
+    abline(h=0, col="#00000060")
     plot(x=segslong, y=logSMratvec, pch=21, col=NULL, bg=pt.bg,
          xlab="landmark", ylab="log shape ratio")
     abline(h=0, col="#00000060")
 	}
   }
-  out <- data.frame(landmark=lmknames,
-                    #mean_ln=tapply(logSMratvec, INDEX=segslong, FUN=mean),
-					sd_ln=tapply(logSMratvec, INDEX=segslong, FUN=sd))
-  return(out)
+  #out <- data.frame(landmark=lmknames,
+  #                  #mean_ln=tapply(logSMratvec, INDEX=segslong, FUN=mean),
+  #				     sd_ln=tapply(logSMratvec, INDEX=segslong, FUN=sd))
+  #return(out)
 }
 
 #' Estimate Mean Form and Landmark Covariance
