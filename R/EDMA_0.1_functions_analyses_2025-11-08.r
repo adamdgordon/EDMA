@@ -232,6 +232,25 @@ meanform <- function(x) {
 				   Z=Beig$vectors[,3]*sqrt(Beig$values[3]))
   rownames(LMKmean) <- lmknames
   # Build in check to see if any axis needs to be inverted to preserve original orientation (i.e., check for reflection)
+  # Check x-axis in LMKmean against first specimen in x
+  xmax <- which(LMKmean[,"X"]==max(LMKmean[,"X"]))[1]
+  xmin <- which(LMKmean[,"X"]==min(LMKmean[,"X"]))[1]
+  diffx <- x[xmax,,1]-x[xmin,,1]
+  xmaxdim <- which(abs(diffx)==max(abs(diffx)))[1]
+  if(diffx[xmaxdim] < 0) LMKmean[,xmaxdim] <- -1*LMKmean[,xmaxdim]
+  # Check y-axis in LMKmean against first specimen in x
+  ymax <- which(LMKmean[,"Y"]==max(LMKmean[,"Y"]))[1]
+  ymin <- which(LMKmean[,"Y"]==min(LMKmean[,"Y"]))[1]
+  diffy <- x[ymax,,1]-x[ymin,,1]
+  ymaxdim <- which(abs(diffy)==max(abs(diffy)))[1]
+  if(diffy[ymaxdim] < 0) LMKmean[,ymaxdim] <- -1*LMKmean[,ymaxdim]
+  # Check z-axis in LMKmean against first specimen in x
+  zmax <- which(LMKmean[,"Z"]==max(LMKmean[,"Z"]))[1]
+  zmin <- which(LMKmean[,"Z"]==min(LMKmean[,"Z"]))[1]
+  diffz <- x[zmax,,1]-x[zmin,,1]
+  zmaxdim <- which(abs(diffz)==max(abs(diffz)))[1]
+  if(diffz[zmaxdim] < 0) LMKmean[,zmaxdim] <- -1*LMKmean[,zmaxdim]
+  # Get mean form matrix
   FMmean <- calcFM(LMKmean)
   # Calculate SigmaKstar
   # step 1
