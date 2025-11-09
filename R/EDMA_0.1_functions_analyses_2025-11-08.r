@@ -106,11 +106,14 @@ EDMApcoa <- function(x) {
 #' @param pt.bg A color value to use in plotting logged ratios. 
 #' @param hl.pch An integer specifying the plotting character to use for highlighted points when a 
 #'   value is supplied to \code{highlight}. 
-#' @param hl.pch A color value to use for highlighted points when a value is supplied to \code{highlight}. 
+#' @param hl.col A color value to use for highlighted points when a value is supplied to \code{highlight}. 
 #' @examples
 #' influentiallmk(A=guenons$rawcoords[,,guenons$genus=="Erythrocebus"][,,1],
 #'                B=guenons$rawcoords[,,guenons$genus=="Miopithecus"][,,1],
 #'                highlight=57)
+#' influentiallmk(A=guenons$rawcoords[,,guenons$genus=="Erythrocebus"][,,1],
+#'                B=guenons$rawcoords[,,guenons$genus=="Miopithecus"][,,1],
+#'                highlight=c(57,131), hl.pch=5, hl.col="blue")
 #' @export
 influentiallmk <- function(A, B, highlight=NULL, pt.bg="#00000020", hl.pch=4, hl.col="#FF0000FF") {
   # A and B are landmark matrices

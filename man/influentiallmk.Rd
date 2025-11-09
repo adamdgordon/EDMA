@@ -20,7 +20,10 @@ in the plot.  Defaults to \code{NULL}.}
 
 \item{pt.bg}{A color value to use in plotting logged ratios.}
 
-\item{hl.pch}{A color value to use for highlighted points when a value is supplied to \code{highlight}.}
+\item{hl.pch}{An integer specifying the plotting character to use for highlighted points when a 
+value is supplied to \code{highlight}.}
+
+\item{hl.col}{A color value to use for highlighted points when a value is supplied to \code{highlight}.}
 
 \item{x}{An array of landmarks for multiple specimens, with the first dimension corresponding to 
 landmarks, the second corresponding to X, Y, and Z, and the third corresponding to specimens.}
@@ -35,4 +38,7 @@ Calculates a measure of spatial variability for each landmark in relation to all
 influentiallmk(A=guenons$rawcoords[,,guenons$genus=="Erythrocebus"][,,1],
                B=guenons$rawcoords[,,guenons$genus=="Miopithecus"][,,1],
                highlight=57)
+influentiallmk(A=guenons$rawcoords[,,guenons$genus=="Erythrocebus"][,,1],
+               B=guenons$rawcoords[,,guenons$genus=="Miopithecus"][,,1],
+               highlight=c(57,131), hl.pch=5, hl.col="blue")
 }
