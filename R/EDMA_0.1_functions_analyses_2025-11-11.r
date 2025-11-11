@@ -94,12 +94,18 @@ EDMApcoa <- function(x) {
 
 #' Visualize Influential Landmarks
 #' 
-#' Calculates a measure of spatial variability for each landmark in relation to all other landmarks 
-#'   for a pair of objects.  This is (mostly) the visualization method of Cole and Richtsmeier (1998), but 
+#' Calculates a ratio of interlandmark distances for all pairs of landmarks between 
+#'   a pair of objects.  This is (mostly) the visualization method of Cole and Richtsmeier (1998), but 
 #'   it presents the log of ratios as opposed to raw ratios, and shows the ratio from shape matrices as 
 #'   well as form matrices.
-#' @param x An array of landmarks for multiple specimens, with the first dimension corresponding to 
-#'   landmarks, the second corresponding to X, Y, and Z, and the third corresponding to specimens.
+#' @param A Either a matrix of landmarks for a single specimen, with the first dimension corresponding to 
+#'   landmarks, the second corresponding to X, Y, and Z; or a form matrix (\code{FM} object); or a 
+#'   shape matrix (\code{SM} object); or a \code{FMmean} object produced by \code{meanform}.  Interlandmark
+#'   distances from this object provide the numerator for ratios.
+#' @param B Either a matrix of landmarks for a single specimen, with the first dimension corresponding to 
+#'   landmarks, the second corresponding to X, Y, and Z; or a form matrix (\code{FM} object); or a 
+#'   shape matrix (\code{SM} object); or a \code{FMmean} object produced by \code{meanform}.  Interlandmark
+#'   distances from this object provide the denominator for ratios.
 #' @param highlight An integer value specifying the number of a landmark to highlight in plots. If 
 #'   provided, all logged ratios for interlandmark distances involving that landmark will be highlighted 
 #'   in the plot.  Defaults to \code{NULL}.
@@ -111,17 +117,51 @@ EDMApcoa <- function(x) {
 #' influentiallmk(A=guenons$rawcoords[,,guenons$genus=="Erythrocebus"][,,1],
 #'                B=guenons$rawcoords[,,guenons$genus=="Miopithecus"][,,1],
 #'                highlight=57)
-#' influentiallmk(A=guenons$rawcoords[,,guenons$genus=="Erythrocebus"][,,1],
-#'                B=guenons$rawcoords[,,guenons$genus=="Miopithecus"][,,1],
+#' influentiallmk(A=meanform(guenons$rawcoords[,,guenons$genus=="Erythrocebus"]),
+#'                B=meanform(guenons$rawcoords[,,guenons$genus=="Miopithecus"]),
 #'                highlight=c(57,131), hl.pch=5, hl.col="blue")
 #' @export
 influentiallmk <- function(A, B, highlight=NULL, pt.bg="#00000020", hl.pch=4, hl.col="#FF0000FF") {
   # A and B are landmark matrices
   plt=TRUE
-  FMA <- calcFM(A)
-  FMB <- calcFM(B)
-  SMA <- calcSM(A)
-  SMB <- calcSM(B)
+  {if (inherits(A, "FM")) {
+    FMA <- A
+    SMA <- FMA/attr(FMA, "size")
+    class(SMA)[class(SMA)=="FM"] <- "SM"
+  }
+  else if (inherits(A, "SM")) {
+    SMA <- A
+    FMA <- SMA*attr(SMA, "size")
+    class(FMA)[class(FMA)=="SM"] <- "FM"
+  }
+  else if (inherits(A, "FMmean")) {
+    A <- A$LMKmean
+    FMA <- calcFM(A)
+    SMA <- calcSM(A)
+  }
+  else {
+    FMA <- calcFM(A)
+    SMA <- calcSM(A)
+  }}
+  {if (inherits(B, "FM")) {
+    FMB <- B
+    SMB <- FMB/attr(FMB, "size")
+    class(SMB)[class(SMB)=="FM"] <- "SM"
+  }
+  else if (inherits(B, "SM")) {
+    SMB <- B
+    FMB <- SMB*attr(SMB, "size")
+    class(FMB)[class(FMB)=="SM"] <- "FM"
+  }
+  else if (inherits(B, "FMmean")) {
+    B <- B$LMKmean
+    FMB <- calcFM(B)
+    SMB <- calcSM(B)
+  }
+  else {
+    FMB <- calcFM(B)
+    SMB <- calcSM(B)
+  }}
   lmknames <- attr(FMA, "Labels")
   nlmk <- length(lmknames)
   nspec <- 2
