@@ -154,7 +154,7 @@ influentiallmk <- function(A, B, highlight=NULL, pt.bg="#00000020", hl.pch=4, hl
     plot(x=segslong[segslongDF$lmk1!=highlight & segslongDF$lmk2!=highlight],
 	     y=logFMratvec[segslongDF$lmk1!=highlight & segslongDF$lmk2!=highlight],
 		 pch=21, col=NULL, bg=pt.bg,
-         xlim=range(segslong), ylim=range(logSMratvec), xlab="landmark", ylab="log form ratio")
+         xlim=range(segslong), ylim=range(logFMratvec), xlab="landmark", ylab="log form ratio")
     abline(h=0, col="#00000060")
 	points(x=segslong[segslongDF$lmk1==highlight | segslongDF$lmk2==highlight],
 	       y=logFMratvec[segslongDF$lmk1==highlight | segslongDF$lmk2==highlight],

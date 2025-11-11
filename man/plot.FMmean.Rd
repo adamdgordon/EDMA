@@ -28,7 +28,11 @@
 
 \item{pt.cols}{...}
 
+\item{pt.col.scale}{...}
+
 \item{pt.size}{...}
+
+\item{pt.size.scale}{...}
 
 \item{pt.alpha}{...}
 
