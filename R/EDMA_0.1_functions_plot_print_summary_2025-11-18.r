@@ -19,7 +19,7 @@
 #' @export
 plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, segs=NULL, tris=NULL, ...) {
   rgl::plot3d(x,
-              asp=1,
+              aspect="iso",
 			  type="s",
               col=pt.cols,
 			  size=pt.size,
