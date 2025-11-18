@@ -138,11 +138,12 @@ plot.FM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alp
 #' @export
 plot.SM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, 
                     offset_x=NULL, offset_y=NULL, offset_z=NULL, ...) {
-  x <- x*attr(x, "size")
+  #x <- x*attr(x, "size")
   lmks <- cmdscale(x,3)
   colnames(lmks) <- c("X", "Y", "Z")
   rownames(lmks) <- attr(x, "Labels")
-  warning("\nShape matrix rescaled and converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
+  #warning("\nShape matrix rescaled and converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
+  warning("\nShape matrix converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
   plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size,
             pt.alpha=pt.alpha, label=label, label.cex=label.cex,
 			offset_x=offset_x, offset_y=offset_y, offset_z=offset_z, ...)
