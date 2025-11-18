@@ -13,7 +13,8 @@
   pt.size = 0.5,
   pt.alpha = 0.5,
   label = FALSE,
-  label.cex = 0.7
+  label.cex = 0.7,
+  ...
 )
 }
 \description{

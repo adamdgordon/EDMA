@@ -16,7 +16,8 @@
   pt.alpha = 0.5,
   label = FALSE,
   label.cex = 0.7,
-  label.adj = 1
+  label.adj = 1,
+  ...
 )
 }
 \arguments{

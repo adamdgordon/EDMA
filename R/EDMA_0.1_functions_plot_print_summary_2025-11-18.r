@@ -23,7 +23,7 @@ plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE,
 			  type="s",
               col=pt.cols,
 			  size=pt.size,
-			  alpha=pt.alpha)
+			  alpha=pt.alpha, ...)
   if (!is.null(segs)) rgl::segments3d(x=x[as.vector(t(segs[,1:2])),])
   if (!is.null(tris)) rgl::triangles3d(x=x[as.vector(t(tris[,1:3])),],
                                        col="black", alpha=0.2)
@@ -62,11 +62,12 @@ plot.FMmean <- function(x, segs=NULL, tris=NULL,
 						pt.size.scale=TRUE,
 						pt.alpha=0.5, 
 						label=FALSE, label.cex=0.7,
-						label.adj=1) {
+						label.adj=1,
+						...) {
   if (pt.col.scale) pt.cols <- colorRampPalette(c("blue", "red"))(256)[round((sqrt(diag(x$SigmaKstar))-min(sqrt(diag(x$SigmaKstar))))/diff(range(sqrt(diag(x$SigmaKstar))))*255,0)+1]
   if (pt.size.scale) pt.size=pt.size*sqrt(diag(x$SigmaKstar))/min(sqrt(diag(x$SigmaKstar)))
   #if (label & pt.size.scale) label.adj=(max(sqrt(diag(x$SigmaKstar))/min(sqrt(diag(x$SigmaKstar)))))^(1/2)
-  plot_lmks(x=x$LMKmean, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex)
+  plot_lmks(x=x$LMKmean, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex, ...)
 }
 
 #' Plot \code{FM} Object
@@ -84,12 +85,12 @@ plot.FMmean <- function(x, segs=NULL, tris=NULL,
 #' 		tris=guenons$triangles,
 #' 		label=TRUE)
 #' @export
-plot.FM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7) {
+plot.FM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, ...) {
   lmks <- cmdscale(x,3)
   colnames(lmks) <- c("X", "Y", "Z")
   rownames(lmks) <- attr(x, "Labels")
   warning("\nForm matrix converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
-  plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex)
+  plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex, ...)
 }
 
 #' Plot \code{SM} Object
@@ -107,11 +108,11 @@ plot.FM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alp
 #' 		tris=guenons$triangles,
 #' 		label=TRUE)
 #' @export
-plot.SM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7) {
+plot.SM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, ...) {
   x <- x*attr(x, "size")
   lmks <- cmdscale(x,3)
   colnames(lmks) <- c("X", "Y", "Z")
   rownames(lmks) <- attr(x, "Labels")
   warning("\nShape matrix rescaled and converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
-  plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex)
+  plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size, pt.alpha=pt.alpha, label=label, label.cex=label.cex, ...)
 }
