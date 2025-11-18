@@ -11,14 +11,11 @@
 #' @param tris ...
 #' @param ... Arguments to be passed to other functions.  Not currently used.
 #' @examples
-#' plot(talapmean,
-#'      segs=guenons$wireframe_segments,
-#'   	tris=guenons$triangles,
-#'  	label=TRUE, pt.alpha=0.2, pt.size=0.3)
-#' plot.FMmean(patasmean, add=TRUE, offset_z=100,
-#'      segs=guenons$wireframe_segments,
-#'  	tris=guenons$triangles,
-#'  	label=TRUE, pt.alpha=0.2, pt.size=0.3)
+#' plot_lmks(guenons$rawcoords[,,guenons$species=="patas"][,,30])
+#' plot_lmks(guenons$rawcoords[,,guenons$species=="patas"][,,30],
+#'           segs=guenons$wireframe_segments,
+#' 		     tris=guenons$triangles,
+#' 		     label=TRUE)
 #' @export
 plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, segs=NULL, tris=NULL, 
                       offset_x=NULL, offset_y=NULL, offset_z=NULL, ...) {
@@ -75,7 +72,10 @@ plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE,
 #'      segs=guenons$wireframe_segments,
 #' 		tris=guenons$triangles,
 #' 		label=TRUE, pt.alpha=0.2, pt.size=0.3)
-#' plot(patasmean, add=TRUE)
+#' plot(patasmean, add=TRUE, offset_z=100,
+#'      segs=guenons$wireframe_segments,
+#'  	tris=guenons$triangles,
+#'  	label=TRUE, pt.alpha=0.2, pt.size=0.3)
 #' @export
 plot.FMmean <- function(x, segs=NULL, tris=NULL,
                         pt.cols="blue",
