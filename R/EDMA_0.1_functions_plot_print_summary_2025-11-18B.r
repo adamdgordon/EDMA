@@ -52,9 +52,9 @@ plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE,
     #rgl::bgplot3d({
     #  plot.new()
     #  title(main = main, line = 2, cex.main=cex.main)})
-	rgl::text3d(x=mean(par3d()$bbox[1:2]),
-	            y=mean(par3d()$bbox[3:4]),
-				z=par3d()$bbox[6] + abs(diff(par3d()$bbox[c(5,6)]))/10,
+	rgl::text3d(x=mean(rgl::par3d()$bbox[1:2]),
+	            y=mean(rgl::par3d()$bbox[3:4]),
+				z=rgl::par3d()$bbox[6] + abs(diff(rgl::par3d()$bbox[c(5,6)]))/10,
 				texts=main,
 				cex=cex.main)
   }
