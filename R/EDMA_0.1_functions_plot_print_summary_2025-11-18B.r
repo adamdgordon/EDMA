@@ -86,7 +86,7 @@ plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE,
 #' plot(patasmean, add=TRUE, offset_z=100,
 #'      segs=guenons$wireframe_segments,
 #'      tris=guenons$triangles,
-#'      label=TRUE, pt.alpha=0.2, pt.size=0.3
+#'      label=TRUE, pt.alpha=0.2, pt.size=0.3,
 #'      main =substitute(paste(italic('Erythrocebus'), " and ", italic('Miopithecus'))),
 #'      cex.main=1.5)
 #' @export
