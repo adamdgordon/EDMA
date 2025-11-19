@@ -18,7 +18,8 @@
 #' 		     label=TRUE)
 #' @export
 plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, segs=NULL, tris=NULL, 
-                      offset_x=NULL, offset_y=NULL, offset_z=NULL, ...) {
+                      offset_x=NULL, offset_y=NULL, offset_z=NULL, 
+					  main=NULL, cex.main=1, ...) {
   if (!is.null(offset_x)) {
     offset_x <- as.numeric(offset_x)
     if (is.na(offset_x)) stop("When present, 'offset_x' must be a real number.")
@@ -47,6 +48,16 @@ plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE,
                          texts=rownames(x),
 			             pos=1,
 						 cex=label.cex)
+  if (!is.null(main)) {
+    #rgl::bgplot3d({
+    #  plot.new()
+    #  title(main = main, line = 2, cex.main=cex.main)})
+	rgl::text3d(x=mean(par3d()$bbox[1:2]),
+	            y=mean(par3d()$bbox[3:4]),
+				z=par3d()$bbox[6] + abs(diff(par3d()$bbox[c(5,6)]))/10,
+				texts=main,
+				cex=cex.main)
+  }
 }
 
 #' Plot \code{FMmean} Object
@@ -70,12 +81,14 @@ plot_lmks <- function(x, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE,
 #' plot(talapmean)
 #' plot(talapmean,
 #'      segs=guenons$wireframe_segments,
-#' 		tris=guenons$triangles,
-#' 		label=TRUE, pt.alpha=0.2, pt.size=0.3)
+#'      tris=guenons$triangles,
+#'      label=TRUE, pt.alpha=0.2, pt.size=0.3)
 #' plot(patasmean, add=TRUE, offset_z=100,
 #'      segs=guenons$wireframe_segments,
-#'  	tris=guenons$triangles,
-#'  	label=TRUE, pt.alpha=0.2, pt.size=0.3)
+#'      tris=guenons$triangles,
+#'      label=TRUE, pt.alpha=0.2, pt.size=0.3
+#'      main =substitute(paste(italic('Erythrocebus'), " and ", italic('Miopithecus'))),
+#'      cex.main=1.5)
 #' @export
 plot.FMmean <- function(x, segs=NULL, tris=NULL,
                         pt.cols="blue",
@@ -85,14 +98,15 @@ plot.FMmean <- function(x, segs=NULL, tris=NULL,
 						pt.alpha=0.5, 
 						label=FALSE, label.cex=0.7,
 						label.adj=1, 
-                        offset_x=NULL, offset_y=NULL, offset_z=NULL,
+                        offset_x=NULL, offset_y=NULL, offset_z=NULL, 
+					    main=NULL, cex.main=1,
 						...) {
   if (pt.col.scale) pt.cols <- colorRampPalette(c("blue", "red"))(256)[round((sqrt(diag(x$SigmaKstar))-min(sqrt(diag(x$SigmaKstar))))/diff(range(sqrt(diag(x$SigmaKstar))))*255,0)+1]
   if (pt.size.scale) pt.size=pt.size*sqrt(diag(x$SigmaKstar))/min(sqrt(diag(x$SigmaKstar)))
   #if (label & pt.size.scale) label.adj=(max(sqrt(diag(x$SigmaKstar))/min(sqrt(diag(x$SigmaKstar)))))^(1/2)
   plot_lmks(x=x$LMKmean, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size,
             pt.alpha=pt.alpha, label=label, label.cex=label.cex,
-			offset_x=offset_x, offset_y=offset_y, offset_z=offset_z,...)
+			offset_x=offset_x, offset_y=offset_y, offset_z=offset_z, main=main, cex.main=cex.main, ...)
 }
 
 #' Plot \code{FM} Object
@@ -111,14 +125,15 @@ plot.FMmean <- function(x, segs=NULL, tris=NULL,
 #' 		label=TRUE)
 #' @export
 plot.FM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, 
-                    offset_x=NULL, offset_y=NULL, offset_z=NULL, ...) {
+                    offset_x=NULL, offset_y=NULL, offset_z=NULL, 
+					main=NULL, cex.main=1, ...) {
   lmks <- cmdscale(x,3)
   colnames(lmks) <- c("X", "Y", "Z")
   rownames(lmks) <- attr(x, "Labels")
   warning("\nForm matrix converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
   plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size,
             pt.alpha=pt.alpha, label=label, label.cex=label.cex,
-			offset_x=offset_x, offset_y=offset_y, offset_z=offset_z, ...)
+			offset_x=offset_x, offset_y=offset_y, offset_z=offset_z, main=main, cex.main=cex.main, ...)
 }
 
 #' Plot \code{SM} Object
@@ -137,7 +152,8 @@ plot.FM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alp
 #' 		label=TRUE)
 #' @export
 plot.SM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alpha=0.5, label=FALSE, label.cex=0.7, 
-                    offset_x=NULL, offset_y=NULL, offset_z=NULL, ...) {
+                    offset_x=NULL, offset_y=NULL, offset_z=NULL, 
+					main=NULL, cex.main=1, ...) {
   #x <- x*attr(x, "size")
   lmks <- cmdscale(x,3)
   colnames(lmks) <- c("X", "Y", "Z")
@@ -146,5 +162,5 @@ plot.SM <- function(x, segs=NULL, tris=NULL, pt.cols="blue", pt.size=0.5, pt.alp
   warning("\nShape matrix converted to landmarks using function 'cmdscale' -\n  some axes may be reflected from original configuration.")
   plot_lmks(lmks, segs=segs, tris=tris, pt.cols=pt.cols, pt.size=pt.size,
             pt.alpha=pt.alpha, label=label, label.cex=label.cex,
-			offset_x=offset_x, offset_y=offset_y, offset_z=offset_z, ...)
+			offset_x=offset_x, offset_y=offset_y, offset_z=offset_z, main=main, cex.main=cex.main, ...)
 }

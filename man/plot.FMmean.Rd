@@ -20,6 +20,8 @@
   offset_x = NULL,
   offset_y = NULL,
   offset_z = NULL,
+  main = NULL,
+  cex.main = 1,
   ...
 )
 }
@@ -56,10 +58,12 @@ plot(patasmean)
 plot(talapmean)
 plot(talapmean,
      segs=guenons$wireframe_segments,
-		tris=guenons$triangles,
-		label=TRUE, pt.alpha=0.2, pt.size=0.3)
+     tris=guenons$triangles,
+     label=TRUE, pt.alpha=0.2, pt.size=0.3)
 plot(patasmean, add=TRUE, offset_z=100,
      segs=guenons$wireframe_segments,
- 	tris=guenons$triangles,
- 	label=TRUE, pt.alpha=0.2, pt.size=0.3)
+     tris=guenons$triangles,
+     label=TRUE, pt.alpha=0.2, pt.size=0.3
+     main =substitute(paste(italic('Erythrocebus'), " and ", italic('Miopithecus'))),
+     cex.main=1.5)
 }

@@ -17,6 +17,8 @@ plot_lmks(
   offset_x = NULL,
   offset_y = NULL,
   offset_z = NULL,
+  main = NULL,
+  cex.main = 1,
   ...
 )
 }
